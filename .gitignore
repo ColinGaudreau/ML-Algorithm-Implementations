@@ -1,0 +1,5 @@
+.DS_Store
+*.pyc
+*ubyte.gz
+*ubyte
+*.m~
