@@ -59,7 +59,8 @@ class KPCA():
 			for col in range(N):
 				K[row, col] = self._kernel_func(X[row,:], X[col,:])
 
-		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(np.sum(K, axis=0), N, 1)/N + np.sum(K)/N**2
+		# pdb.set_trace()
+		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(np.sum(K, axis=0), M, 1)/N + np.sum(K)/N**2
 
 		for row in range(X.shape[0]):
 			for col in range(self.components):
