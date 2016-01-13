@@ -14,7 +14,13 @@ data = load_digits()
 X = np.reshape(data.images, (data.images.shape[0],-1))
 y = data.target
 
-N = 200
+N = 400
+
+# randomize order of data
+np.random.seed(0)
+index = np.random.permutation(X.shape[0])
+X = X[index,:]
+y = y[index]
 
 X_train = X[:N,:]
 y_train = y[:N]

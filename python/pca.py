@@ -17,7 +17,7 @@ class KPCA():
 		self.X = None
 
 		self._K_sum = None
-		self._K = None
+		self._K_cached_sumcols = None
 
 		self._eigenvectors = None
 		self._eigenvalues = None
@@ -35,9 +35,9 @@ class KPCA():
 			for col in range(N):
 				K[row,col] = self._kernel_func(X[row,:], X[col,:])
 
-		self._K = K
 		self._K_sum = np.sum(K)
-		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (N,1)), 1, N)/N - repmat(np.sum(K, axis=0), N, 1)/N + self._K_sum/N**2
+		self._K_cached_sumcols = np.sum(K, axis=0)
+		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (N,1)), 1, N)/N - repmat(self._K_cached_sumcols, N, 1)/N + self._K_sum/N**2
 
 		# kernel matrix must be symmetric, so using symmetric matrix eigenvalue solver
 		self._eigenvalues, self._eigenvectors = eigh(K_c)
@@ -48,7 +48,7 @@ class KPCA():
 		self._eigenvalues = self._eigenvalues[key]
 		self._eigenvectors = self._eigenvectors[:,key]
 		self.X = self.X[key,:]
-
+		self._K_cached_sumcols = self._K_cached_sumcols[key]
 
 	def transform(self, X):
 		if self._eigenvectors is None:
@@ -62,7 +62,7 @@ class KPCA():
 			for col in range(N):
 				K[row, col] = self._kernel_func(X[row,:], self.X[col,:])
 
-		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(np.sum(self._K, axis=0), M, 1)/N + self._K_sum/N**2
+		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(self._K_cached_sumcols, M, 1)/N + self._K_sum/N**2
 
 		for row in range(X.shape[0]):
 			for col in range(self.components):
