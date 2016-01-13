@@ -6,7 +6,8 @@ import pdb
 
 class KPCA():
 	'''
-	Object that performs kernal PCA.
+	Class for performing kernal PCA, used "http://pca.narod.ru/scholkopf_kernel.pdf" as reference (found it REALLY useful),
+	I believe this is actually the original paper.
 	'''
 	def __init__(self, kernel='rbf', components=0, degree=2, gamma=1):
 		self.kernel = kernel
