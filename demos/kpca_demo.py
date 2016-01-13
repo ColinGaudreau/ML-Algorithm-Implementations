@@ -28,9 +28,8 @@ result = svc.score(X_test, y_test)
 
 print 'Result with no PCA: ' + str(result)
 
-components = 64
 # Regular linear PCA (using my KCPA with linear kernel)
-kpca = KPCA(kernel='linear', components=components)
+kpca = KPCA(kernel='linear', components=54)
 kpca.fit(X_train)
 Xlin_train = kpca.transform(X_train)
 Xlin_test = kpca.transform(X_test)
@@ -42,7 +41,7 @@ result = svc.score(Xlin_test, y_test)
 print 'Result with regular PCA: ' + str(result)
 
 # Kernel PCA (poly deg 3)
-kpca = KPCA(kernel='poly', degree=3, components=components)
+kpca = KPCA(kernel='poly', degree=3)
 kpca.fit(X_train)
 Xpoly_train = kpca.transform(X_train)
 Xpoly_test = kpca.transform(X_test)
@@ -54,8 +53,8 @@ result = svc.score(Xpoly_test, y_test)
 print 'Result with kernel (poly, deg 3) PCA: ' + str(result)
 
 # Kernel PCA (rbf gamma=10)
-gamma = 0.01
-kpca = KPCA(kernel='rbf', gamma=gamma, components=components)
+gamma = 8.5e-4
+kpca = KPCA(kernel='rbf', gamma=gamma)
 kpca.fit(X_train)
 Xrbf_train = kpca.transform(X_train)
 Xrbf_test = kpca.transform(X_test)

@@ -1,5 +1,5 @@
 import numpy as np
-from numpy.linalg import eig
+from numpy.linalg import eigh
 from numpy.matlib import repmat
 
 import pdb
@@ -17,6 +17,7 @@ class KPCA():
 		self.X = None
 
 		self._K_sum = None
+		self._K = None
 
 		self._eigenvectors = None
 		self._eigenvalues = None
@@ -34,10 +35,12 @@ class KPCA():
 			for col in range(N):
 				K[row,col] = self._kernel_func(X[row,:], X[col,:])
 
+		self._K = K
 		self._K_sum = np.sum(K)
 		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (N,1)), 1, N)/N - repmat(np.sum(K, axis=0), N, 1)/N + self._K_sum/N**2
 
-		self._eigenvalues, self._eigenvectors = eig(K_c)
+		# kernel matrix must be symmetric, so using symmetric matrix eigenvalue solver
+		self._eigenvalues, self._eigenvectors = eigh(K_c)
 		self._eigenvalues = np.real(self._eigenvalues)
 		self._eigenvectors = np.real(self._eigenvectors)
 		key = np.argsort(self._eigenvalues)
@@ -57,10 +60,9 @@ class KPCA():
 		K = np.zeros((M,N))
 		for row in range(M):
 			for col in range(N):
-				K[row, col] = self._kernel_func(X[row,:], X[col,:])
+				K[row, col] = self._kernel_func(X[row,:], self.X[col,:])
 
-		# pdb.set_trace()
-		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(np.sum(K, axis=0), M, 1)/N + np.sum(K)/N**2
+		K_c = K - repmat(np.reshape(np.sum(K, axis=1), (M,1)), 1, N)/N - repmat(np.sum(self._K, axis=0), M, 1)/N + self._K_sum/N**2
 
 		for row in range(X.shape[0]):
 			for col in range(self.components):
