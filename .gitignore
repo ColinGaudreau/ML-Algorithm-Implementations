@@ -3,3 +3,6 @@
 *ubyte.gz
 *ubyte
 *.m~
+
+# executables
+*.out
