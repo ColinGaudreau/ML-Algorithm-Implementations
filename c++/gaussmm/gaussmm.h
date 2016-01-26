@@ -30,6 +30,9 @@ public:
 	GaussMM(int mixtures, double tolerance = TOLERANCE, int maxIterations = MAX_ITERATIONS);
 	void fit(vector<VectorXd> &X);
 
+	static double normal(VectorXd &x, VectorXd &mu, MatrixXd &sigma);
+	static double mixture(VectorXd &x, VectorXd &priors, vector<VectorXd> &mus, vector<MatrixXd> &sigmas);
+
 private:
 
 	void initializeVariables();
@@ -38,8 +41,6 @@ private:
 	vector<VectorXd> findNewMeans(VectorXd &membershipExpectations);
 	vector<MatrixXd> findNewCov(VectorXd &membershipExpectations);
 
-	static double normal(VectorXd &x, VectorXd &mu, MatrixXd &sigma);
-	static double mixture(VectorXd &x, VectorXd &priors, vector<VectorXd> &mus, vector<MatrixXd> &sigmas);
 	static double membershipPosterior(VectorXd &x, int mixture, VectorXd &priors, vector<VectorXd> &mus, vector<MatrixXd> &sigmas);
 	static VectorXd membershipExpectations(vector<VectorXd> &X, VectorXd &priors, vector<VectorXd> &mus, vector<MatrixXd> &sigmas);
 	static double logLikelihood(vector<VectorXd> &X, VectorXd &priors, vector<VectorXd> &mus, vector<MatrixXd> &sigmas);
